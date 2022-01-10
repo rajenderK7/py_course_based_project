@@ -1,3 +1,4 @@
+from pickle import TRUE
 import pygame
 import math as mt
 import random as rd
@@ -6,9 +7,9 @@ pygame.init()
 
 
 class SortingVisualizer:
-    # BG_COLOR = 255, 255, 255
     BG_COLOR = 0, 0, 0
-    # BG_COLOR = 128, 128, 128 # GREY
+    # BG_COLOR = 247, 147, 30  # GOLD
+    # BG_COLOR = 128, 128, 128  # GREY
     WHITE = 255, 255, 255
     BLACK = 0, 0, 0
     SIDE_MARGIN = 100
@@ -22,6 +23,7 @@ class SortingVisualizer:
         (58, 190, 255),
     ]
     FONT = pygame.font.SysFont("verdana", 30)
+    MENU_FONT = pygame.font.SysFont("verdana", 20)
 
     def __init__(self, width, height, lst):
         self.width = width
@@ -40,13 +42,14 @@ class SortingVisualizer:
             self.height - self.TOP_MARGIN) / (self.max_val - self.min_val))
 
 
-def display_handler(visualizer, sort_name):
+def display_handler(visualizer, sort_name, ascending):
     visualizer.window.fill(visualizer.BG_COLOR)
-    current_sort = visualizer.FONT.render(sort_name, 1, visualizer.YELLOW)
+    current_sort = visualizer.FONT.render(
+        f"{sort_name} - {'Ascending' if ascending else 'Descending'}", 1, visualizer.YELLOW)
     visualizer.window.blit(
         current_sort, (visualizer.width // 2 - current_sort.get_width() // 2, 5))
-    menu = visualizer.FONT.render(
-        "X - Reset | Enter - Start | B - Bubble Sort | I - Insertion Sort", 1, visualizer.WHITE)
+    menu = visualizer.MENU_FONT.render(
+        "X - Reset | Enter - Start | A - Ascending | D - Descending | B - Bubble Sort | I - Insertion Sort", 1, visualizer.WHITE)
     visualizer.window.blit(
         menu, (visualizer.width // 2 - menu.get_width() // 2, 45))
     display_array_handler(visualizer)
@@ -82,11 +85,13 @@ def display_array_handler(visualizer, swappers={}, refresh=False):
         pygame.display.update()
 
 
-def bubbleSort(visualizer):
+def bubbleSort(visualizer, ascending=True):
     lst = visualizer.lst
     for i in range(len(lst) - 1):
         for j in range(len(lst) - i - 1):
-            if lst[j] > lst[j+1]:
+            n1 = lst[j]
+            n2 = lst[j+1]
+            if (n1 > n2 and ascending) or (n1 < n2 and not ascending):
                 lst[j], lst[j+1] = lst[j+1], lst[j]
                 display_array_handler(visualizer, swappers={
                                       j: visualizer.RED, j+1: visualizer.YELLOW}, refresh=True)
@@ -94,15 +99,15 @@ def bubbleSort(visualizer):
     return lst
 
 
-def insertionSort(visualizer):
+def insertionSort(visualizer, ascending=True):
     lst = visualizer.lst
     for i in range(1, len(lst)):
         temp = lst[i]
         j = i - 1
         while True:
-            sort = i > 0 and lst[i-1] > temp
-
-            if not sort:
+            ascending_sort = i > 0 and lst[i-1] > temp and ascending
+            descending_sort = i > 0 and lst[i-1] < temp and not ascending
+            if not ascending_sort and not descending_sort:
                 break
 
             lst[i] = lst[i-1]
@@ -125,6 +130,7 @@ def main_loop():
 
     # For Sorting process
     isSorting = False
+    ascending = True
     # current_sort = insertionSort
     current_sort = bubbleSort
     current_sort_name = "Bubble Sort"
@@ -134,7 +140,7 @@ def main_loop():
 
     while isRunning:
         clock.tick(60)
-        display_handler(visualizer, current_sort_name)
+        display_handler(visualizer, current_sort_name, ascending)
 
         if isSorting:
             try:
@@ -154,10 +160,13 @@ def main_loop():
                 lst = create_array(curr_min, curr_max, curr_range)
                 visualizer.update_array(lst)
                 isSorting = False
-                # display_handler(visualizer)
+            elif event.key == pygame.K_a and not isSorting:
+                ascending = True
+            elif event.key == pygame.K_d and not isSorting:
+                ascending = False
             elif event.key == pygame.K_RETURN:
                 isSorting = True
-                current_sort_func = current_sort(visualizer)
+                current_sort_func = current_sort(visualizer, ascending)
                 # current_sort_func = current_sort(visualizer, 0, curr_range - 1)
             elif event.key == pygame.K_i and not isSorting:
                 current_sort = insertionSort
