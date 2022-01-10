@@ -58,7 +58,7 @@ def display_array_handler(visualizer):
 
 
 def main_loop():
-    lst = create_array(-100, 100, 40)
+    lst = create_array(50, 500, 100)
     isRunning = True
     visualizer = SortingVisualizer(1000, 600, lst)
     clock = pygame.time.Clock()
