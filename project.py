@@ -1,7 +1,3 @@
-from email import header
-from logging import exception
-from re import A
-from ssl import Options
 import pygame
 import math as mt
 import random as rd
@@ -46,13 +42,13 @@ class SortingVisualizer:
 
 def display_handler(visualizer, sort_name):
     visualizer.window.fill(visualizer.BG_COLOR)
-    heading = visualizer.FONT.render(sort_name, 1, visualizer.YELLOW)
+    current_sort = visualizer.FONT.render(sort_name, 1, visualizer.YELLOW)
     visualizer.window.blit(
-        heading, (visualizer.width // 2 - heading.get_width() // 2, 5))
-    options = visualizer.FONT.render(
+        current_sort, (visualizer.width // 2 - current_sort.get_width() // 2, 5))
+    menu = visualizer.FONT.render(
         "X - Reset | Enter - Start | B - Bubble Sort | I - Insertion Sort", 1, visualizer.WHITE)
     visualizer.window.blit(
-        options, (visualizer.width // 2 - options.get_width() // 2, 45))
+        menu, (visualizer.width // 2 - menu.get_width() // 2, 45))
     display_array_handler(visualizer)
     pygame.display.update()
 
