@@ -9,8 +9,9 @@ pygame.init()
 class SortingVisualizer:
     WHITE = 255, 255, 255
     # BG_COLOR = WHITE
+    DARK_BLUE = 91, 87, 252
     BG_COLOR = 0, 0, 0
-    # BG_COLOR = 247, 147, 30  # GOLD
+    # BG_COLOR = (247, 147, 30)  # GOLD
     # BG_COLOR = 128, 128, 128  # GREY
     BLACK = 0, 0, 0
     SIDE_MARGIN = 100
@@ -20,8 +21,8 @@ class SortingVisualizer:
     YELLOW = 255, 255, 0
     BAR_COLORS = [
         (0, 255, 239),
-        (77, 226, 235),
-        (58, 190, 255),
+        (91, 87, 252),
+        (232, 152, 235)
     ]
     FONT = pygame.font.SysFont("verdana", 30)
     MENU_FONT = pygame.font.SysFont("verdana", 18)
