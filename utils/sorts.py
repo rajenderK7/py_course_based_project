@@ -1,3 +1,4 @@
+import pygame
 from project import display_array_handler
 
 
@@ -46,4 +47,59 @@ def insertionSort(visualizer, ascending=True):
                 j: visualizer.RED, j+1: visualizer.YELLOW}, refresh=True)
             yield True
 
+    return lst
+
+
+def partition(visualizer, arr, low, high):
+    i = (low-1)         # index of smaller element
+    pivot = arr[high]     # pivot
+
+    for j in range(low, high):
+        # If current element is smaller than or
+        # equal to pivot
+        if arr[j] <= pivot:
+
+            # increment index of smaller element
+            i = i+1
+            arr[i], arr[j] = arr[j], arr[i]
+            display_array_handler(visualizer, swappers={
+                j: visualizer.RED, i: visualizer.YELLOW}, refresh=True)
+            # yield True
+
+    arr[i+1], arr[high] = arr[high], arr[i+1]
+    # display_array_handler(visualizer, swappers={
+    #             j: visualizer.RED, j: visualizer.YELLOW}, refresh=True)
+    # yield True
+    return (i+1)
+
+
+# The main function that implements QuickSort
+# arr[] --> Array to be sorted,
+# low  --> Starting index,
+# high  --> Ending index
+
+# Function to do Quick sort
+
+
+def quickSort(visualizer, arr, low, high, ascending=True):
+    # yield True
+    if len(arr) == 1:
+        # yield True
+        return arr
+    if low < high:
+        # at right place
+        pi = partition(visualizer, arr, low, high)
+        # Separately sort elements before
+        # partition and after partition
+        quickSort(visualizer, arr, low, pi-1)
+        # yield True
+        quickSort(visualizer, arr, pi+1, high)
+        # yield True
+    # yield True
+    return arr
+
+
+def callQ(visualizer, arr, low, high, ascending=True):
+    lst = quickSort(visualizer, arr, low, high, ascending=ascending)
+    yield True
     return lst

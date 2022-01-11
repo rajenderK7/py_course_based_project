@@ -24,8 +24,8 @@ class SortingVisualizer:
         (91, 87, 252),
         (232, 152, 235)
     ]
-    FONT = pygame.font.SysFont("verdana", 30)
-    MENU_FONT = pygame.font.SysFont("verdana", 18)
+    FONT = pygame.font.SysFont("verdana", 25)
+    MENU_FONT = pygame.font.SysFont("verdana", 17)
 
     def __init__(self, width, height, lst):
         self.width = width
@@ -51,7 +51,7 @@ def display_handler(visualizer, sort_name, ascending):
     visualizer.window.blit(
         current_sort, (visualizer.width // 2 - current_sort.get_width() // 2, 5))
     menu = visualizer.MENU_FONT.render(
-        "X - Reset | Enter - Start | A - Ascending | D - Descending | B - Bubble Sort | I - Insertion Sort | S - Selection Sort", 1, visualizer.WHITE)
+        "X - Reset | Enter - Start | A - Ascending | D - Descending | B - Bubble Sort | I - Insertion Sort | S - Selection Sort | Q - Quick Sort", 1, visualizer.WHITE)
     visualizer.window.blit(
         menu, (visualizer.width // 2 - menu.get_width() // 2, 45))
     display_array_handler(visualizer)
@@ -65,6 +65,7 @@ def create_array(min_val, max_val, n):
 
 
 def display_array_handler(visualizer, swappers={}, refresh=False):
+
     if refresh:
         current_area = (visualizer.SIDE_MARGIN // 2, visualizer.TOP_MARGIN, visualizer.width -
                         visualizer.SIDE_MARGIN, visualizer.height - visualizer.TOP_MARGIN)
@@ -79,7 +80,6 @@ def display_array_handler(visualizer, swappers={}, refresh=False):
         # color ovveride if it is present in the dictionary
         if i in swappers.keys():
             color = swappers[i]
-
         pygame.draw.rect(visualizer.window, color, (x_coordinate,
                          y_coordinate, visualizer.bar_width, visualizer.height))
 
@@ -103,7 +103,7 @@ def main_loop():
     current_sort_name = "Bubble Sort"
     current_sort_func = None
     lst = create_array(curr_min, curr_max, curr_range)
-    visualizer = SortingVisualizer(1100, 600, lst)
+    visualizer = SortingVisualizer(1200, 600, lst)
 
     while isRunning:
         clock.tick(60)
@@ -116,7 +116,6 @@ def main_loop():
                 isSorting = False
 
         for event in pygame.event.get():
-
             if event.type == pygame.QUIT:
                 isRunning = False
 
@@ -138,7 +137,11 @@ def main_loop():
                 ascending = False
             elif event.key == pygame.K_RETURN:
                 isSorting = True
-                current_sort_func = current_sort(visualizer, ascending)
+                if current_sort != callQ:
+                    current_sort_func = current_sort(visualizer, ascending)
+                else:
+                    current_sort_func = current_sort(
+                        visualizer, lst, 0, curr_range-1, ascending)
                 # current_sort_func = current_sort(visualizer, 0, curr_range - 1)
             elif event.key == pygame.K_i and not isSorting:
                 current_sort = insertionSort
@@ -149,6 +152,9 @@ def main_loop():
             elif event.key == pygame.K_b and not isSorting:
                 current_sort = bubbleSort
                 current_sort_name = "Bubble Sort"
+            elif event.key == pygame.K_q and not isSorting:
+                current_sort = callQ
+                current_sort_name = "Quick Sort"
 
     pygame.quit()
 
