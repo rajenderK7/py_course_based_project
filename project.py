@@ -139,7 +139,7 @@ def main_loop():
             elif event.key == pygame.K_RETURN:
                 isSorting = True
                 current_sort_func = current_sort(visualizer, ascending)
-                # current_sort_func = current_sort(visualizer, 0, curr_range - 1)
+
             elif event.key == pygame.K_i and not isSorting:
                 current_sort = insertionSort
                 current_sort_name = "Insertion Sort"
